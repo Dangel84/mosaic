@@ -1,0 +1,45 @@
+@import '../core/theming/theming';
+@import '../core/theming/palette';
+
+@mixin left-marker($color) {
+    $gray100: mc-color($mc-grey, 100);
+    box-shadow: inset -1px 0 0 0 $gray100, inset 0 1px 0 0 $gray100,
+    inset 0 -1px 0 0 $gray100, inset 4px 0 0 0 mc-color($color, 400);
+}
+
+@mixin mc-cards-theme($theme) {
+    $info: map-get($theme, primary);
+    $error: map-get($theme, warn);
+    $warning: $mc-yellow;
+    $success: $mc-green;
+    $background-info: map-get($theme, background);
+    $background-color: map-get($background-info, background);
+    
+    .mc-card {
+        background-color: mc-color($mc-grey, 60);
+        
+        &__info {
+            background-color: mc-color($info, 60);
+            @include left-marker($info);
+        }
+        
+        &__warning {
+            background-color: mc-color($warning, 60);
+            @include left-marker($warning);
+        }
+        
+        &__success {
+            background-color: mc-color($success, 60);
+            @include left-marker($success);
+        }
+        
+        &__error {
+            background-color: mc-color($error, 60);
+            @include left-marker($error);
+        }
+        
+        &__white {
+            background-color: $background-color;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+@import 'cards-theme';
+
+$mc-card-padding: 12px 24px;
+$mc-card-min-height: 64px;
+
+.mc-card {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    cursor: pointer;
+
+    .mc-cards-wrapper {
+        padding: $mc-card-padding;
+    }
+
+    //min-height: $mc-card-min-height;
+
+    &.cdk-focused {
+        z-index: 1;
+    }
+}
