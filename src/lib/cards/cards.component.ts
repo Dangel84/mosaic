@@ -4,13 +4,13 @@ import {
     Component,
     ElementRef, Input,
     OnDestroy, EventEmitter,
-    ViewEncapsulation, Host, HostBinding
+    ViewEncapsulation, HostBinding
 } from '@angular/core';
 
 import { FocusMonitor } from '@ptsecurity/cdk/a11y';
 
 
-export enum State {
+export enum Status {
     Info,
     Success,
     Warning,
@@ -31,16 +31,17 @@ const name = 'mc-card';
     }
 })
 export class McCard implements OnDestroy {
-    get tabIndex(): number {
-        return this.readonly ? -1 : this._tabIndex;
+    get tabIndex(): number | null {
+        return this.readonly ? null : this._tabIndex;
     }
 
     @HostBinding('attr.tabIndex')
     @Input()
-    set tabIndex(value: number) {
+    set tabIndex(value: number | null) {
         this._tabIndex = value;
     }
 
+    @HostBinding('class.mc-readonly')
     @Input()
     readonly = false;
 
@@ -54,23 +55,26 @@ export class McCard implements OnDestroy {
     mode: 'color' | 'white' = 'color';
 
     @Input()
-    state: State = State.Info;
+    status: Status = Status.Info;
 
-    private _tabIndex: number = 0;
+    @HostBinding('class.mc-card__hover')
+    hover  = false;
+
+    private _tabIndex: number | null = 0;
 
     constructor(private _elementRef: ElementRef, private _focusMonitor: FocusMonitor) {
         this._focusMonitor.monitor(this._elementRef.nativeElement, false);
     }
 
-    get stateClass() {
-        switch (this.state) {
-            case State.Error:
+    get statusClass() {
+        switch (this.status) {
+            case Status.Error:
                 return `${name}__error`;
-            case State.Info:
+            case Status.Info:
                 return `${name}__info`;
-            case State.Success:
+            case Status.Success:
                 return `${name}__success`;
-            case State.Warning:
+            case Status.Warning:
                 return `${name}__warning`;
             default:
                 return '';
@@ -87,6 +91,17 @@ export class McCard implements OnDestroy {
 
     focus(): void {
         this.hostElement.focus();
+    }
+
+    clicked($event: MouseEvent) {
+        if (!this.readonly) {
+            $event.stopPropagation();
+            this.selectedChange.emit(!this.selected);
+        }
+    }
+
+    mouseEnter() {
+        this.hover = !this.readonly ? true : false
     }
 
     private get hostElement() {

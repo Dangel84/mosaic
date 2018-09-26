@@ -1,4 +1,5 @@
 @import 'cards-theme';
+@import '../core/styles/common/layout';
 
 $mc-card-padding: 12px 24px;
 $mc-card-min-height: 64px;
@@ -14,8 +15,35 @@ $mc-card-min-height: 64px;
     }
 
     //min-height: $mc-card-min-height;
+    
+    &:focus {
+        outline: none;
+    }
 
     &.cdk-focused {
         z-index: 1;
     }
+    
+    .mc-cards-focus-overlay {
+        @include mc-fill;
+        pointer-events:none;
+    }
+    
+    .mc-cards-hover-overlay {
+        @include mc-fill;
+        display: none !important;
+        pointer-events:none;
+    }
+    
+    &.mc-card__hover {
+        .mc-cards-hover-overlay {
+            display: block !important;
+        }
+    }
+    
+    &.mc-readonly {
+        cursor: auto;
+    }
 }
+
+
